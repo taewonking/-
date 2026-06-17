@@ -62,7 +62,7 @@ if uploaded:
             try:
                 # Gemini 설정
                 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-                model = genai.GenerativeModel("gemini-2.0-flash")
+                model = genai.GenerativeModel("gemini-1.5-flash-latest")
 
                 # 이미지 로드
                 img = Image.open(uploaded)
