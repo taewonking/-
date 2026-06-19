@@ -7,6 +7,113 @@ matplotlib.rcParams['font.family'] = 'DejaVu Sans'
 
 st.set_page_config(page_title="Calculator", page_icon="🧮", layout="centered")
 
+# ── 화려한 배경 스타일 추가 ────────────────────────────────
+st.markdown("""
+<style>
+    /* 전체 배경 그라데이션 */
+    .stApp {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+    }
+    
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    /* 메인 컨텐츠 배경 */
+    .main {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+    }
+    
+    /* 제목 스타일 */
+    h1 {
+        background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 3em !important;
+        font-weight: 900 !important;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    
+    /* 부제목 스타일 */
+    h2, h3 {
+        color: #667eea;
+        font-weight: 700;
+    }
+    
+    /* 버튼 스타일 */
+    .stButton > button {
+        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 12px 24px !important;
+        font-weight: 600 !important;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6) !important;
+    }
+    
+    /* 입력창 스타일 */
+    .stNumberInput > div > div > input,
+    .stSelectbox > div > div > select,
+    .stTextInput > div > div > input {
+        border: 2px solid #667eea !important;
+        border-radius: 10px !important;
+        padding: 12px !important;
+        background: white !important;
+    }
+    
+    /* 성공 메시지 */
+    .stSuccess {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(79, 172, 254, 0.1)) !important;
+        border-left: 5px solid #10b981 !important;
+        border-radius: 10px !important;
+    }
+    
+    /* 에러 메시지 */
+    .stError {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(245, 158, 11, 0.1)) !important;
+        border-left: 5px solid #ef4444 !important;
+        border-radius: 10px !important;
+    }
+    
+    /* 구분선 */
+    .stDivider {
+        border-color: #667eea !important;
+        opacity: 0.3 !important;
+    }
+    
+    /* 메트릭 박스 */
+    .stMetric {
+        background: linear-gradient(135deg, #667eea15, #764ba215) !important;
+        border-radius: 10px !important;
+        padding: 20px !important;
+        border-left: 5px solid #667eea !important;
+    }
+    
+    /* 확장 박스 */
+    .streamlit-expanderHeader {
+        background: linear-gradient(135deg, #667eea10, #764ba210) !important;
+        border-radius: 10px !important;
+        color: #667eea !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 st.title("🧮 Calculator")
 st.markdown("사칙연산 · 모듈러 · 지수 · 로그 연산을 지원합니다.")
 
