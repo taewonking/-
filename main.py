@@ -1,5 +1,9 @@
 import streamlit as st
 import math
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.rcParams['font.family'] = 'DejaVu Sans'
 
 st.set_page_config(page_title="Calculator", page_icon="🧮", layout="centered")
 
@@ -103,3 +107,87 @@ with st.expander("연산 설명"):
 | 로그 | 밑이 b인 a의 로그 | log₁₀(100) = 2 |
 """
     )
+
+st.divider()
+
+# ── 그래프 ────────────────────────────────────────────────
+st.subheader("📊 함수 그래프")
+
+PRESETS = {
+    "직접 입력": "",
+    "y = x²": "x**2",
+    "y = x³": "x**3",
+    "y = √x": "np.sqrt(x)",
+    "y = |x|": "np.abs(x)",
+    "y = sin(x)": "np.sin(x)",
+    "y = cos(x)": "np.cos(x)",
+    "y = tan(x)": "np.tan(x)",
+    "y = eˣ": "np.exp(x)",
+    "y = ln(x)": "np.log(x)",
+    "y = log₁₀(x)": "np.log10(x)",
+    "y = 1/x": "1/x",
+}
+
+preset = st.selectbox("프리셋 함수", list(PRESETS.keys()))
+
+if preset == "직접 입력":
+    func_input = st.text_input(
+        "함수 입력 (x를 변수로 사용)",
+        value="x**2",
+        placeholder="예: x**2 + 2*x + 1, np.sin(x), np.exp(-x)"
+    )
+else:
+    func_input = st.text_input(
+        "함수 입력 (x를 변수로 사용)",
+        value=PRESETS[preset],
+    )
+
+col1, col2 = st.columns(2)
+with col1:
+    x_min = st.number_input("x 최솟값", value=-10.0)
+with col2:
+    x_max = st.number_input("x 최댓값", value=10.0)
+
+if st.button("그래프 그리기", use_container_width=True):
+    if x_min >= x_max:
+        st.error("❌ x 최솟값은 최댓값보다 작아야 합니다.")
+    elif not func_input.strip():
+        st.error("❌ 함수를 입력해주세요.")
+    else:
+        try:
+            x = np.linspace(x_min, x_max, 1000)
+            # 허용된 함수만 사용
+            allowed = {
+                "np": np, "x": x,
+                "sin": np.sin, "cos": np.cos, "tan": np.tan,
+                "exp": np.exp, "log": np.log, "log10": np.log10,
+                "log2": np.log2, "sqrt": np.sqrt, "abs": np.abs,
+                "pi": np.pi, "e": np.e,
+            }
+            y = eval(func_input, {"__builtins__": {}}, allowed)
+            y = np.where(np.isfinite(y), y, np.nan)
+
+            fig, ax = plt.subplots(figsize=(8, 4))
+            ax.plot(x, y, color="#ea580c", linewidth=2)
+            ax.axhline(0, color="black", linewidth=0.8, linestyle="--", alpha=0.5)
+            ax.axvline(0, color="black", linewidth=0.8, linestyle="--", alpha=0.5)
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+            ax.set_title(f"y = {func_input}")
+            ax.grid(True, alpha=0.3)
+            ax.set_xlim(x_min, x_max)
+
+            # y축 범위 자동 조정 (이상값 제외)
+            y_finite = y[np.isfinite(y)]
+            if len(y_finite) > 0:
+                y_range = np.percentile(y_finite, [2, 98])
+                margin = (y_range[1] - y_range[0]) * 0.1 or 1
+                ax.set_ylim(y_range[0] - margin, y_range[1] + margin)
+
+            st.pyplot(fig)
+            plt.close(fig)
+
+        except Exception as e:
+            st.error(f"❌ 함수 오류: {e}\n\n힌트: numpy 함수는 np.sin(x) 형태로 입력하세요.")
+
+st.caption("사용 가능: x, np.sin, np.cos, np.tan, np.exp, np.log, np.log10, np.sqrt, np.abs, np.pi, np.e")
