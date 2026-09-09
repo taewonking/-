@@ -56,7 +56,7 @@ with st.sidebar:
 uploaded = st.file_uploader("📷 메뉴판 사진 업로드", type=["jpg", "jpeg", "png", "webp"])
 
 if uploaded:
-    st.image(uploaded, use_column_width=True)
+    st.image(uploaded, use_container_width=True)
 
     if st.button("🔍 메뉴 분석하기", type="primary", use_container_width=True):
         with st.spinner("분석 중... 잠시만 기다려주세요 🍜"):
